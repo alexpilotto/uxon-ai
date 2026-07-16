@@ -1,6 +1,6 @@
 # UXON AI
 
-UXON is an MCP server and API for creating landing pages, running A/B experiments, and tracking conversions across domains.
+UXON is a post-click platform with an API and MCP connector for creating landing pages, running A/B experiments, and tracking conversions across domains.
 
 Developers and AI agents use UXON to manage the post-click marketing workflow: programmatic landing page creation, custom code page imports, cross-domain A/B testing, first-party attribution, conversion reporting, and repeatable agency operations through one API and MCP connector.
 
