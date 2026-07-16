@@ -1,8 +1,12 @@
 # UXON Knowledge Base
 
-This knowledge base mirrors selected UXON Help Center guidance in public Markdown so developers and AI agents can retrieve practical setup context alongside the API command references.
+This knowledge base mirrors UXON Help Center guidance in public Markdown so developers and AI agents can retrieve practical setup context alongside the API command references.
 
-The first batch is curated for high-value technical discovery: agent connection, code page imports, external-page experiments, domain setup, tracking setup, and reporting workflows. A wider Help Center export can be added after this public structure is stable.
+The curated articles below target high-value technical discovery: agent connection, code page imports, external-page experiments, domain setup, tracking setup, and reporting workflows. The full published Help Center export is also available for breadth and source coverage.
+
+## Full Help Center Export
+
+- [Published UXON Help Center export](help-center/README.md)
 
 ## Curated Articles
 

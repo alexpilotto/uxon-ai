@@ -132,7 +132,7 @@ Use the [examples](examples) folder for copy-paste starting points:
 
 ## Knowledge Base
 
-The [knowledge base](kb/README.md) mirrors selected UXON Help Center guidance in public Markdown:
+The [knowledge base](kb/README.md) mirrors UXON Help Center guidance in public Markdown:
 
 - [Connect an external AI agent to UXON](kb/agent-workflows/connect-external-ai-agent.md)
 - [Import code pages with a ZIP file](kb/landing-pages/import-code-pages.md)
@@ -140,6 +140,7 @@ The [knowledge base](kb/README.md) mirrors selected UXON Help Center guidance in
 - [Connect a custom domain](kb/domains/connect-custom-domain.md)
 - [Set up enhanced conversions with GTM](kb/tracking/enhanced-conversions-gtm.md)
 - [Read CRO performance reports from an agent](kb/reporting/read-cro-performance-reports.md)
+- [Full published Help Center export](kb/help-center/README.md)
 
 ## Documentation Roadmap
 
@@ -149,7 +150,7 @@ This repository is being built in layers:
 2. Capability-specific command pages.
 3. Agency runbooks and copy-paste examples.
 4. Curated knowledge-base articles.
-5. Wider Help Center export after the structure is stable.
+5. Full published Help Center export with source collection structure.
 
 ## Links
 
