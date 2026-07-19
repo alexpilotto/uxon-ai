@@ -2,7 +2,7 @@
 
 This folder contains public Markdown exports of published UXON Help Center articles. The structure follows the source Help Center collections so developers and AI agents can retrieve operational guidance by topic.
 
-Exported published articles: 109
+Exported published articles: 113
 
 These files complement the curated guides in [`kb/`](../README.md), the API command pages in [`skills/`](../../skills/README.md), and the operating runbooks in [`runbooks/`](../../runbooks/README.md).
 
@@ -11,9 +11,13 @@ These files complement the curated guides in [`kb/`](../README.md), the API comm
 ### Agent workflows and API
 
 - [API keys vs Claude connector: security and UX differences](agent-workflows-and-api/15284590-api-keys-vs-claude-connector-security-and-ux-differences.md) - Understand which access model fits your team and why most teams should use the connector.
+- [ChatGPT, Custom GPTs, Claude, and API keys: which UXON connection should I use?](agent-workflows-and-api/15995748-chatgpt-custom-gpts-claude-and-api-keys-which-uxon-connection-should-i-use.md) - Choose the right UXON connection path for ChatGPT, Custom GPTs, Claude, and external agents.
+- [Connect a Custom GPT to UXON with Actions](agent-workflows-and-api/15995746-connect-a-custom-gpt-to-uxon-with-actions.md) - Use a UXON API key and copy-paste OpenAPI schema to let a Custom GPT read UXON data.
 - [Connect an external AI agent to UXON AI](agent-workflows-and-api/14729002-connect-an-external-ai-agent-to-uxon-ai.md) - Choose the right connection path: Claude connector (OAuth) or API key + SKILLS.md.
+- [Connect UXON to ChatGPT with MCP](agent-workflows-and-api/15995745-connect-uxon-to-chatgpt-with-mcp.md) - Set up UXON as a ChatGPT app using the UXON MCP endpoint and OAuth sign-in.
 - [Connect UXON to Claude (custom connector)](agent-workflows-and-api/15284583-connect-uxon-to-claude-custom-connector.md) - Set up the UXON connector in Claude and complete OAuth sign-in successfully.
 - [Team permissions for connector operations (owner/admin/member)](agent-workflows-and-api/15284591-team-permissions-for-connector-operations-owner-admin-member.md) - See which team roles can view connector metrics, export reports, and revoke sessions.
+- [Troubleshoot ChatGPT MCP and Custom GPT Action setup](agent-workflows-and-api/15995749-troubleshoot-chatgpt-mcp-and-custom-gpt-action-setup.md) - Fix common setup, authentication, schema, and permission issues when connecting UXON to ChatGPT.
 - [Troubleshoot Claude connector issues](agent-workflows-and-api/15284584-troubleshoot-claude-connector-issues.md) - Fix common UXON connector problems in Claude, including access denied and activity report export.
 - [What you can do from Claude with UXON](agent-workflows-and-api/15284589-what-you-can-do-from-claude-with-uxon.md) - Practical tasks you can run in Claude using the UXON connector.
 
