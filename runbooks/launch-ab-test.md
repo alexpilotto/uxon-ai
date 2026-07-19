@@ -11,6 +11,8 @@ Launch an A/B test between UXON landing page variants by resolving goals, pages,
 - Experiment nickname
 - Traffic allocation
 - Visitor or device filters, if needed
+- Optional traffic filters, such as `utm_source = google`
+- Optional geo filters
 
 ## Command Sequence
 
@@ -64,7 +66,11 @@ Launch an A/B test between UXON landing page variants by resolving goals, pages,
     "controlVariant": "lpv_control_uuid",
     "variantSource": "uxon",
     "variantLandingPage": "lp_variant_uuid",
-    "variantVariant": "lpv_variant_uuid"
+    "variantVariant": "lpv_variant_uuid",
+    "testTrigger": "entry",
+    "visitorType": "all-visitors",
+    "deviceType": "all-devices",
+    "trafficAllocation": 100
   }
 }
 ```
@@ -85,6 +91,18 @@ Confirm launch with the operator first.
 ```
 
 ### 6. Monitor Results
+
+Read back setup and status first:
+
+```json
+{
+  "command": "experiments.get",
+  "input": {
+    "siteId": "site_uuid",
+    "experimentId": "exp_uuid"
+  }
+}
+```
 
 ```json
 {

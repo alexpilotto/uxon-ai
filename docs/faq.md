@@ -4,7 +4,7 @@ This FAQ answers technical questions about using UXON as an API and MCP executio
 
 ## Can Claude Code create landing pages with UXON?
 
-Yes. UXON provides API commands and MCP workflows that let agents create landing page drafts, update page metadata, upload custom code variants, and publish pages after review. A typical workflow is to generate a static page bundle with Claude Code, Codex, Cursor, or v0, then upload the built ZIP through `landing_pages.code_variant.upload`.
+Yes. UXON provides API commands and MCP workflows that let agents create blank landing page drafts, submit UXON AI landing page briefs, update page metadata, upload custom code variants, and publish pages after review. A typical custom-code workflow is to generate a static page bundle with Claude Code, Codex, Cursor, or v0, then upload the built ZIP through `landing_pages.code_variant.upload`.
 
 ## Is there an MCP server for A/B testing?
 

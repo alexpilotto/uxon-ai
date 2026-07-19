@@ -82,7 +82,7 @@ This GPT is read/reporting only. Do not claim that it can create, update, publis
     }
   ],
   "paths": {
-    "/api/external/v1/commands": {
+    "/api/external/commands": {
       "post": {
         "operationId": "runUxonCommand",
         "summary": "Run an approved UXON command",

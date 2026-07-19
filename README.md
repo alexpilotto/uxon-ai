@@ -8,7 +8,7 @@ UXON supports Claude connector workflows, API-key automation, and external agent
 
 ## What UXON Does
 
-- Create and publish landing pages through API commands or guided agent workflows.
+- Create blank landing pages, submit AI landing page briefs, poll generation jobs, and publish approved pages through API commands or guided agent workflows.
 - Import externally coded landing page bundles from Claude Code, Codex, Cursor, v0, or custom build systems.
 - Launch A/B experiments across UXON pages, external URLs, or URL-pattern targets.
 - Track conversions with first-party attribution across pages, variants, channels, contacts, and revenue events.
@@ -85,8 +85,8 @@ All API-key commands use this envelope:
 
 High-value command families include:
 
-- `landing_pages.*` for page creation, updates, publishing, and custom code uploads.
-- `experiments.*` for draft creation, updates, lifecycle changes, and cross-domain testing.
+- `landing_pages.*` for blank page creation, AI brief generation, job polling, variant operations, publishing, review links, duplication, deletion, and custom code uploads.
+- `experiments.*` for draft creation, inspection, targeting updates, lifecycle changes, and cross-domain testing.
 - `reports.*` for landing page, experiment, channel, trend, contact, and revenue reporting.
 - `tracking.setup` for GTM or direct GA4/Meta setup.
 - `goals.*` for conversion goal management.
@@ -109,7 +109,7 @@ Example Claude prompt:
 Start first client setup for Acme Dental, website https://acmedental.com.
 ```
 
-The guided onboarding workflow collects missing inputs, prepares setup steps, and keeps domain and tracking work inside a controlled UXON flow.
+The guided onboarding workflow collects missing inputs, starts automatic brand/media import from the website URL, prepares setup steps, and keeps domain and tracking work inside a controlled UXON flow.
 
 ## Runbooks And Examples
 

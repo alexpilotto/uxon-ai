@@ -26,7 +26,7 @@ Use this guide when UXON does not connect to ChatGPT, a Custom GPT Action fails,
 ## Fast checks
 
 1. Confirm you are using the correct UXON connection path: **ChatGPT MCP** uses OAuth, while **Custom GPT Actions** use an API key.
-2. Confirm the UXON endpoint is typed exactly: **https://uxon.ai/api/mcp** for MCP, or **https://uxon.ai/api/external/v1/commands** for Custom GPT Actions.
+2. Confirm the UXON endpoint is typed exactly: **https://uxon.ai/api/mcp** for MCP, or **https://uxon.ai/api/external/commands** for Custom GPT Actions.
 3. Confirm your UXON account or API key has access to the sub-account you are asking about.
 4. Try the simplest read request first: **Show my UXON sub-accounts.**
 

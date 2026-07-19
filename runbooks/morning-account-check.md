@@ -17,6 +17,8 @@ Produce a short per-client summary covering live pages, running experiments, ses
 }
 ```
 
+`snapshot.landingPages`, `snapshot.experiments`, and `snapshot.domains` are integer counts.
+
 ### 2. List Pages And Experiments Per Site
 
 ```json

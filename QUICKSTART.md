@@ -28,7 +28,7 @@ curl -X POST 'https://uxon.ai/api/external/commands' \
 
 If the key is valid, UXON returns the sub-accounts available to that key.
 
-### 3. Create A Landing Page Draft
+### 3. Create A Blank Landing Page Draft
 
 ```bash
 curl -X POST 'https://uxon.ai/api/external/commands' \
@@ -43,9 +43,11 @@ curl -X POST 'https://uxon.ai/api/external/commands' \
   }'
 ```
 
+Use `landing_pages.generate_from_brief` when the user wants UXON AI to generate a landing page from a structured brief, then poll the returned job with `landing_pages.generation_status`.
+
 ### 4. Create A Draft Experiment
 
-Resolve landing page and variant IDs first with `landing_pages.list` and `reports.landing_page.details`.
+Resolve landing page and variant IDs first with `landing_pages.get` or `reports.landing_page.details`.
 
 ```bash
 curl -X POST 'https://uxon.ai/api/external/commands' \
@@ -64,7 +66,10 @@ curl -X POST 'https://uxon.ai/api/external/commands' \
       "controlVariant": "lpv_control_uuid",
       "variantSource": "uxon",
       "variantLandingPage": "lp_variant_uuid",
-      "variantVariant": "lpv_variant_uuid"
+      "variantVariant": "lpv_variant_uuid",
+      "testTrigger": "entry",
+      "visitorType": "all-visitors",
+      "deviceType": "all-devices"
     }
   }'
 ```
@@ -115,6 +120,7 @@ Claude will ask for missing inputs and call UXON tools behind the scenes.
 - Confirm before publishing pages or starting experiments.
 - Confirm before changing tracking or domains.
 - Use `selectedGoals` for new experiments.
+- Use valid IANA timezones, such as `Australia/Brisbane`, when passing reporting or report timezone.
 - Read back resources after write commands.
 - Pull reports after traffic starts.
 

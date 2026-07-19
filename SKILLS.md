@@ -67,11 +67,10 @@ Allowed actions:
 
 Blocked actions:
 
-- Delete operations.
 - Raw internal passthrough endpoints.
 - Commands outside the public command catalogue.
 
-Agents should treat publishing pages, starting experiments, changing tracking, and connecting domains as high-impact actions that require explicit operator confirmation.
+Agents should treat publishing pages, starting experiments, deleting pages or variants, changing tracking, and connecting domains as high-impact actions that require explicit operator confirmation.
 
 ## Operational Defaults
 
@@ -79,7 +78,66 @@ Agents should treat publishing pages, starting experiments, changing tracking, a
 - Pagination defaults to `page = 1` and `perPage = 25`.
 - `perPage` max is `100` for most list commands.
 - Dates should use ISO-8601 strings, such as `2026-04-19T00:00:00.000Z`.
-- Supported `dateRange` presets include `last-7-days`, `last-14-days`, `last-30-days`, and `last-90-days`.
+- Supported report `dateRange` presets are `today`, `yesterday`, `last-3-days`, `last-7-days`, `last-14-days`, `last-30-days`, `last-90-days`, `last-365-days`, and `custom`.
+- For custom report windows, use `dateRange: "custom"` with `from` and `to` as ISO-8601 strings.
+- Report `timezone` should be a valid IANA timezone, such as `UTC`, `Australia/Brisbane`, `America/New_York`, or `Europe/London`.
+- Default API key rate limit is 60 requests per minute. Responses include `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset`.
+- `subaccounts.list.snapshot.landingPages`, `snapshot.experiments`, and `snapshot.domains` are integer counts, not nested objects.
+
+## Agent-Writable Object Contracts
+
+### Landing Page `settings`
+
+For `landing_pages.create` and `landing_pages.update`, agents should only write the publish object:
+
+```json
+{
+  "publish": {
+    "domain": "www.example.com",
+    "path": "/offer",
+    "hideFromSearch": true
+  }
+}
+```
+
+- `publish.domain`: connected domain hostname.
+- `publish.path`: `/` or a published path such as `/offer`.
+- `publish.hideFromSearch`: boolean. If `domain` or `path` is provided and `hideFromSearch` is omitted, UXON defaults it to `true`.
+- Do not send `settings.published`. That is UXON's internal full page-builder/published snapshot.
+- Do not construct page-builder state inside `settings`.
+
+### Landing Page `knowledgeBase`
+
+`knowledgeBase` stores page notes/brief context only. It does not run AI generation.
+
+Recommended shape:
+
+```json
+{
+  "summary": "Short context for the page",
+  "notes": ["Important note"],
+  "links": [{ "label": "Brief", "url": "https://example.com" }],
+  "raw": {}
+}
+```
+
+### Experiment `trafficFilters`
+
+`trafficFilters` are exact string key/value tracking filters:
+
+```json
+{
+  "utm_source": "google",
+  "utm_medium": "cpc",
+  "utm_campaign": "winter-sale"
+}
+```
+
+- Runtime compares stored tracking values exactly to the provided value.
+- Do not use regex, operators, arrays, includes/contains matching, or country filters.
+- Common fields: `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`.
+- Also supported when present: `utm_term`, `utm_id`, `utm_source_platform`, `gclid`, `gbraid`, `wbraid`, `fbclid`, `msclkid`, `ttclid`, `li_fat_id`, `twclid`.
+- Use `geoFilters` for country targeting.
 
 ## ID Discovery Protocol
 
@@ -132,7 +190,7 @@ onboarding_first_client_setup
 
 Purpose:
 
-Run onboarding, branding, tracking, and domain setup in one guided flow.
+Run first client setup with automatic brand/media import from the website URL. Do not ask the user for brand colors, typography, voice, or logo URL during first setup unless they volunteer those details.
 
 Recommended prompt:
 
@@ -147,17 +205,19 @@ The workflow asks for missing inputs, pauses safely when DNS needs external acti
 Tool:
 
 ```text
-landing_pages_create_from_brief
+landing_pages_generate_from_brief
 ```
 
 Purpose:
 
-Create a UXON landing page draft from structured brief fields.
+Submit the real UXON AI landing page generation pipeline from structured brief fields.
 
 Useful fields:
 
 - `clientReference` or `siteId`
-- `lpName`
+- `name`
+- `brief.brandName`
+- `brief.websiteUrl`
 - `language`
 - `funnelStrategy`
 - `buyerGroup`
@@ -211,7 +271,14 @@ Fetch one sub-account by `siteId`.
 
 #### `subaccounts.create`
 
-Create a new client sub-account.
+Create a new client sub-account. UXON automatically starts brand fetching, color/font assignment, and website media scraping from `websiteUrl`.
+
+Accepted feedback modes:
+
+- `free_comments`: reviewers can leave open comments.
+- `ai_approvals`: review links use AI-assisted approval decisions.
+
+`reportingTimezone` is optional but recommended for API/MCP agents when known. Use a valid IANA timezone.
 
 ```json
 {
@@ -220,6 +287,7 @@ Create a new client sub-account.
     "name": "Acme Dental",
     "websiteUrl": "https://acmedental.com",
     "reportingCurrency": "USD",
+    "reportingTimezone": "Australia/Brisbane",
     "landingPageFeedbackMode": "ai_approvals"
   }
 }
@@ -227,14 +295,15 @@ Create a new client sub-account.
 
 #### `subaccounts.update`
 
-Update sub-account profile fields, reporting currency, or feedback mode.
+Update sub-account profile fields, reporting currency, reporting timezone, or feedback mode.
 
 ```json
 {
   "command": "subaccounts.update",
   "input": {
     "siteId": "site_uuid",
-    "name": "Acme Dental Group"
+    "name": "Acme Dental Group",
+    "reportingTimezone": "Australia/Brisbane"
   }
 }
 ```
@@ -254,9 +323,23 @@ List landing pages for one sub-account.
 }
 ```
 
+#### `landing_pages.get`
+
+Get landing page metadata, variants, preview URLs, and live URLs.
+
+```json
+{
+  "command": "landing_pages.get",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid"
+  }
+}
+```
+
 #### `landing_pages.create`
 
-Create a landing page and optional initial variants. If variants are omitted, UXON creates a default control variant.
+Create a draft landing page with one blank builder `Control` variant. This does not run UXON AI generation.
 
 ```json
 {
@@ -264,17 +347,65 @@ Create a landing page and optional initial variants. If variants are omitted, UX
   "input": {
     "siteId": "site_uuid",
     "name": "Spring Offer",
-    "variants": [
-      { "name": "Control" },
-      { "name": "Variant B" }
-    ]
+    "settings": {
+      "publish": {
+        "domain": "www.example.com",
+        "path": "/spring-offer",
+        "hideFromSearch": true
+      }
+    },
+    "knowledgeBase": {
+      "summary": "Emergency dental appointment landing page for new patients.",
+      "notes": ["Same-day availability is the key buyer trigger."],
+      "links": [],
+      "raw": {}
+    }
+  }
+}
+```
+
+#### `landing_pages.generate_from_brief`
+
+Submit the real UXON AI landing page generation pipeline from an approved brief.
+
+```json
+{
+  "command": "landing_pages.generate_from_brief",
+  "input": {
+    "siteId": "site_uuid",
+    "name": "Spring Offer",
+    "brief": {
+      "brandName": "Acme Dental",
+      "websiteUrl": "https://acmedental.com",
+      "language": "English (US)",
+      "funnelStrategy": "Service",
+      "buyerGroup": "Consumers (B2C)",
+      "desiredAction": "Submit a form",
+      "market": "Brisbane, Queensland",
+      "serviceOrProduct": "Emergency dental appointments",
+      "idealClient": "Adults with urgent dental pain"
+    }
+  }
+}
+```
+
+#### `landing_pages.generation_status`
+
+Poll a UXON AI landing page generation job.
+
+```json
+{
+  "command": "landing_pages.generation_status",
+  "input": {
+    "siteId": "site_uuid",
+    "jobId": "job_uuid"
   }
 }
 ```
 
 #### `landing_pages.update`
 
-Update landing page metadata, settings, knowledge base content, or variant definitions.
+Update landing page metadata, `settings.publish`, or `knowledgeBase`. Use variant commands for variant changes.
 
 ```json
 {
@@ -283,6 +414,129 @@ Update landing page metadata, settings, knowledge base content, or variant defin
     "siteId": "site_uuid",
     "landingPageId": "lp_uuid",
     "name": "Spring Offer - Rev 2"
+  }
+}
+```
+
+#### `landing_pages.variants.create`
+
+Create a blank builder/code variant, or duplicate from an existing variant.
+
+```json
+{
+  "command": "landing_pages.variants.create",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid",
+    "name": "Variant B",
+    "sourceVariantId": "lpv_control_uuid",
+    "variantType": "builder"
+  }
+}
+```
+
+#### `landing_pages.variants.get`
+
+Get one landing page variant.
+
+```json
+{
+  "command": "landing_pages.variants.get",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid",
+    "variantId": "lpv_uuid"
+  }
+}
+```
+
+#### `landing_pages.variants.update`
+
+Update one variant's name, settings, or builder state.
+
+```json
+{
+  "command": "landing_pages.variants.update",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid",
+    "variantId": "lpv_uuid",
+    "name": "Variant B - Rev 2"
+  }
+}
+```
+
+#### `landing_pages.variants.set_main`
+
+Set the main variant for a landing page.
+
+```json
+{
+  "command": "landing_pages.variants.set_main",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid",
+    "variantId": "lpv_uuid"
+  }
+}
+```
+
+#### `landing_pages.variants.duplicate`
+
+Duplicate one builder variant.
+
+```json
+{
+  "command": "landing_pages.variants.duplicate",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid",
+    "variantId": "lpv_uuid",
+    "name": "Variant B Copy"
+  }
+}
+```
+
+#### `landing_pages.variants.delete`
+
+Delete one landing page variant. Confirm with the operator first.
+
+```json
+{
+  "command": "landing_pages.variants.delete",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid",
+    "variantId": "lpv_uuid"
+  }
+}
+```
+
+#### `landing_pages.duplicate`
+
+Duplicate a landing page and its builder variants.
+
+```json
+{
+  "command": "landing_pages.duplicate",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid",
+    "name": "Spring Offer Copy"
+  }
+}
+```
+
+#### `landing_pages.delete`
+
+Delete a landing page. Confirm with the operator first.
+
+```json
+{
+  "command": "landing_pages.delete",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid"
   }
 }
 ```
@@ -303,6 +557,69 @@ Use this for static page bundles generated by Claude Code, Codex, Cursor, v0, or
     "zipUrl": "https://example.com/builds/landing-page.zip",
     "makeMain": false,
     "publish": false
+  }
+}
+```
+
+#### `landing_pages.code_variant.upload_init`
+
+Create a signed upload URL for a custom code ZIP.
+
+Use after creating a code variant with `landing_pages.variants.create` and `variantType: "code"`.
+
+```json
+{
+  "command": "landing_pages.code_variant.upload_init",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid",
+    "variantId": "lpv_code_uuid",
+    "fileName": "landing-page.zip",
+    "size": 248000
+  }
+}
+```
+
+#### `landing_pages.code_variant.upload_complete`
+
+Import a custom code ZIP after the signed upload completes.
+
+```json
+{
+  "command": "landing_pages.code_variant.upload_complete",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid",
+    "variantId": "lpv_code_uuid",
+    "uploadToken": "returned_upload_token"
+  }
+}
+```
+
+#### `landing_pages.publish_changes`
+
+Publish current draft variant changes to the live page.
+
+```json
+{
+  "command": "landing_pages.publish_changes",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid"
+  }
+}
+```
+
+#### `landing_pages.review_link`
+
+Create a landing page review link for preview comments or approvals.
+
+```json
+{
+  "command": "landing_pages.review_link",
+  "input": {
+    "siteId": "site_uuid",
+    "landingPageId": "lp_uuid"
   }
 }
 ```
@@ -337,11 +654,36 @@ List experiments for one sub-account.
 }
 ```
 
+#### `experiments.get`
+
+Get one experiment's setup, status, selected goals, targeting, and saved counters.
+
+```json
+{
+  "command": "experiments.get",
+  "input": {
+    "siteId": "site_uuid",
+    "experimentId": "exp_uuid"
+  }
+}
+```
+
 #### `experiments.create`
 
 Create a draft experiment. UXON supports UXON page variants, external URLs, and URL-pattern targets.
 
 Use `selectedGoals` for new integrations. Use `experiments.set_status` to launch after creating the draft.
+
+Important fields:
+
+- `testTrigger`: `entry` or `visits`.
+- `visitorType`: `all-visitors`, `new-visitors`, or `returning-visitors`.
+- `deviceType`: `all-devices`, `desktop-only`, or `mobile-only`.
+- `trafficAllocation`: number from `0` to `100`.
+- `preserveRedirectParams`: default `true`.
+- `urlPatterns.conditions[].operator`: `is`, `contains`, `starts_with`, or `ends_with`.
+- `urlPatterns` supports up to 5 total conditions and can be used on Control or Variant, not both.
+- `geoFilters.countries.type`: `include` or `exclude`.
 
 UXON page experiment:
 
@@ -360,7 +702,10 @@ UXON page experiment:
     "variantSource": "uxon",
     "variantLandingPage": "lp_variant_uuid",
     "variantVariant": "lpv_variant_uuid",
-    "trafficAllocation": 100
+    "trafficAllocation": 100,
+    "testTrigger": "entry",
+    "visitorType": "all-visitors",
+    "deviceType": "all-devices"
   }
 }
 ```
@@ -420,7 +765,20 @@ Update mutable experiment settings without changing lifecycle status.
     "siteId": "site_uuid",
     "experimentId": "exp_uuid",
     "trafficAllocation": 60,
-    "visitorType": "new-visitors"
+    "testTrigger": "visits",
+    "visitorType": "new-visitors",
+    "deviceType": "desktop-only",
+    "trafficFilters": {
+      "utm_source": "google",
+      "utm_campaign": "brand"
+    },
+    "geoFilters": {
+      "countries": {
+        "type": "exclude",
+        "countryCodes": ["GB"],
+        "includeUnknown": true
+      }
+    }
   }
 }
 ```
@@ -783,18 +1141,19 @@ Fetch one Help Center article by ID.
 
 ### Onboard A New Client
 
-1. Ask for client name, website URL, reporting currency, and landing page feedback mode.
+1. Ask for client name, website URL, reporting currency, optional reporting timezone, and landing page feedback mode.
 2. Run `subaccounts.create`.
-3. Run `goals.create` for the first conversion goal.
-4. Run `landing_pages.create` for the first page.
-5. Run `domains.add` and `domains.connect`.
-6. Configure tracking with `tracking.setup`.
+3. Let UXON automatically start brand/color/font/media import from the website URL.
+4. Run `goals.create` for the first conversion goal.
+5. Run `landing_pages.create` for a blank page, or `landing_pages.generate_from_brief` when the user wants AI page generation.
+6. Run `domains.add` and `domains.connect`.
+7. Configure tracking with `tracking.setup`.
 
 ### Launch A UXON-Page Experiment
 
 1. Run `goals.list` or `goals.create`.
 2. Run `landing_pages.list`.
-3. Run `reports.landing_page.details` to resolve variant IDs.
+3. Run `landing_pages.get` or `reports.landing_page.details` to resolve variant IDs.
 4. Run `experiments.create` with UXON control and variant sources.
 5. Confirm launch with the operator.
 6. Run `experiments.set_status` with `Running`.

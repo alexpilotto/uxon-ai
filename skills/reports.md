@@ -22,6 +22,26 @@ Pull CRO performance data from any agent or automation. UXON reports cover landi
 - `reports.contacts.list`: list contacts with filters and pagination.
 - `reports.contacts.detail`: fetch one contact profile and latest submission detail.
 
+## Date Range And Timezone
+
+Report commands default to the last 30 days when no date range is provided.
+
+Supported `dateRange` presets:
+
+- `today`
+- `yesterday`
+- `last-3-days`
+- `last-7-days`
+- `last-14-days`
+- `last-30-days`
+- `last-90-days`
+- `last-365-days`
+- `custom`
+
+For custom windows, send `dateRange: "custom"` with `from` and `to` as ISO-8601 strings.
+
+`timezone` should be a valid IANA timezone, such as `UTC`, `Australia/Brisbane`, `America/New_York`, or `Europe/London`. If omitted, UXON uses the sub-account reporting timezone, then `UTC`.
+
 ## Example: Experiment Details
 
 ```json
@@ -30,7 +50,9 @@ Pull CRO performance data from any agent or automation. UXON reports cover landi
   "input": {
     "siteId": "site_uuid",
     "experimentId": "exp_uuid",
-    "conversionGoalId": "all"
+    "conversionGoalId": "all",
+    "dateRange": "last-30-days",
+    "timezone": "Australia/Brisbane"
   }
 }
 ```

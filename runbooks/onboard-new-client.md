@@ -7,10 +7,13 @@ Onboard a new client by creating a sub-account, setting conversion goals, creati
 - Client or business name.
 - Website URL.
 - Reporting currency, such as `USD`, `AUD`, or `GBP`.
+- Reporting timezone when known, as an IANA timezone such as `Australia/Brisbane`. Do not add friction if unknown.
 - Landing page feedback mode, usually `ai_approvals`.
 - First conversion goal, such as `Qualified Lead`, `Phone Call`, or `Purchase`.
 - Preferred publishing domain or subdomain.
 - Tracking mode: `gtm` or `direct`.
+
+Do not ask for brand colors, typography, voice, logo URL, or media assets during first setup unless the user volunteers them. UXON uses the website URL to start brand fetching, color/font assignment, and media scraping automatically.
 
 ## Command Sequence
 
@@ -23,6 +26,7 @@ Onboard a new client by creating a sub-account, setting conversion goals, creati
     "name": "Acme Dental",
     "websiteUrl": "https://acmedental.com",
     "reportingCurrency": "USD",
+    "reportingTimezone": "Australia/Brisbane",
     "landingPageFeedbackMode": "ai_approvals"
   }
 }
@@ -43,7 +47,7 @@ Save the returned `siteId`.
 }
 ```
 
-### 3. Create The First Landing Page
+### 3. Create The First Blank Landing Page
 
 ```json
 {
@@ -54,6 +58,8 @@ Save the returned `siteId`.
   }
 }
 ```
+
+Use `landing_pages.generate_from_brief` instead when the user wants UXON AI to create the page from a brief.
 
 ### 4. Add The Domain
 
@@ -96,6 +102,7 @@ Save the returned `siteId`.
 ## Done Criteria
 
 - Sub-account exists.
+- Brand/media import has been triggered from the website URL.
 - At least one conversion goal exists.
 - First landing page draft exists.
 - Domain is added and DNS instructions are available or verified.

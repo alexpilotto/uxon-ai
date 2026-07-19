@@ -25,6 +25,10 @@ curl -X POST 'https://uxon.ai/api/external/commands' \
       \"controlVariant\": \"${UXON_CONTROL_VARIANT_ID}\",
       \"variantSource\": \"uxon\",
       \"variantLandingPage\": \"${UXON_VARIANT_LP_ID}\",
-      \"variantVariant\": \"${UXON_VARIANT_VARIANT_ID}\"
+      \"variantVariant\": \"${UXON_VARIANT_VARIANT_ID}\",
+      \"testTrigger\": \"entry\",
+      \"visitorType\": \"all-visitors\",
+      \"deviceType\": \"all-devices\",
+      \"trafficAllocation\": 100
     }
   }"

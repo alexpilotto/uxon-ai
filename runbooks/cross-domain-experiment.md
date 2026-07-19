@@ -10,6 +10,7 @@ Run a cross-domain A/B experiment by comparing UXON pages, existing website page
 - Variant URL
 - Experiment nickname
 - Whether query parameters should be preserved
+- Optional visitor, device, traffic, or geo filters
 
 ## Command Sequence
 
@@ -39,7 +40,10 @@ Run a cross-domain A/B experiment by comparing UXON pages, existing website page
     "controlPageUrl": "https://www.example.com/checkout-a",
     "variantSource": "external",
     "variantPageUrl": "https://www.example.com/checkout-b",
-    "preserveRedirectParams": true
+    "preserveRedirectParams": true,
+    "testTrigger": "entry",
+    "visitorType": "all-visitors",
+    "deviceType": "all-devices"
   }
 }
 ```
@@ -80,3 +84,10 @@ Confirm launch with the operator first.
 - Operator confirmed launch.
 - Experiment is running.
 - Reporting command is ready for follow-up.
+
+## Notes
+
+- Cross-domain tests require the UXON pixel on external pages.
+- Use `trafficFilters` only for exact string tracking matches, such as `utm_source = google`.
+- Use `geoFilters` for country targeting.
+- Keep `preserveRedirectParams` enabled when campaign attribution matters.
