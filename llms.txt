@@ -1,0 +1,49 @@
+# UXON AI
+
+> Landing pages, A/B experiments, and conversion tracking your AI agent can build and run.
+
+UXON AI is a CRO platform with an agent-first API, MCP server, and Claude skills
+playbook. Agents use UXON to create landing pages, import externally coded pages,
+launch cross-domain A/B experiments, track first-party conversions, and pull CRO
+reports, all without logging into the dashboard.
+
+## Key URLs
+
+- Website: https://uxon.ai
+- Live agent skills: https://uxon.ai/api/skills
+- MCP server endpoint: https://uxon.ai/api/mcp
+- API command endpoint: https://uxon.ai/api/external/commands
+- GitHub: https://github.com/alexpilotto/uxon-ai
+
+## Important Docs
+
+- Agent command playbook: ./SKILLS.md
+- Quickstart: ./QUICKSTART.md
+- Landing pages: ./skills/landing-pages.md
+- Experiments: ./skills/experiments.md
+- Conversion tracking: ./skills/conversion-tracking.md
+- Reports: ./skills/reports.md
+- Runbooks: ./runbooks/README.md
+
+## Command Envelope
+
+{
+  "command": "landing_pages.generate_from_brief",
+  "input": {}
+}
+
+POST https://uxon.ai/api/external/commands
+Authorization: Bearer uxon_live_...
+Content-Type: application/json
+
+## What Agents Can Do
+
+- Create blank landing pages or submit AI briefs and poll generation jobs.
+- Import coded page bundles from Claude Code, Codex, Cursor, or v0.
+- Publish, duplicate, and review landing pages through API commands.
+- Launch A/B experiments across UXON pages, external URLs, or URL patterns.
+- Track conversions with first-party attribution across variants, channels,
+  contacts, and revenue events.
+- Configure GTM or direct GA4/Meta tracking with guardrails.
+- Pull CRO reports and channel breakdowns for agent analysis.
+- Onboard agency client accounts with branding, domains, and goals.
