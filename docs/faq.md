@@ -48,4 +48,4 @@ No. This repository documents the public UXON API, MCP connector, command patter
 
 ## Where should I start?
 
-Start with [QUICKSTART.md](../QUICKSTART.md), then read [SKILLS.md](../SKILLS.md) for the command catalogue and [what-is-uxon.md](what-is-uxon.md) for the platform overview.
+Start with [QUICKSTART.md](../QUICKSTART.md), then read the [latest live SKILLS page](https://uxon.ai/api/skills) for the current command catalogue and [what-is-uxon.md](what-is-uxon.md) for the platform overview. The repository [SKILLS.md](../SKILLS.md) is a readable snapshot.

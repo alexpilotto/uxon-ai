@@ -126,6 +126,7 @@ Claude will ask for missing inputs and call UXON tools behind the scenes.
 
 ## Next Files
 
-- [SKILLS.md](SKILLS.md) for the command catalogue.
+- [Latest live SKILLS page](https://uxon.ai/api/skills) for the current command catalogue.
+- [SKILLS.md](SKILLS.md) for the repository snapshot.
 - [docs/what-is-uxon.md](docs/what-is-uxon.md) for the platform overview.
 - [docs/faq.md](docs/faq.md) for capability-focused questions.

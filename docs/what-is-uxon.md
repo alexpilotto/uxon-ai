@@ -60,4 +60,4 @@ API-key commands are useful for custom automations. MCP is useful for OAuth-base
 - `reports.*` returns performance data.
 - `docs.*` lets agents search and fetch Help Center articles.
 
-See [SKILLS.md](../SKILLS.md) for the public command playbook.
+See the [latest live SKILLS page](https://uxon.ai/api/skills) for the current public command playbook. The repository [SKILLS.md](../SKILLS.md) is a readable snapshot.

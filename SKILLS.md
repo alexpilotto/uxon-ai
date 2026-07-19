@@ -2,6 +2,14 @@
 
 This playbook describes the public UXON API and MCP command surface for AI agents, automation tools, and developers.
 
+Latest live version:
+
+```text
+https://uxon.ai/api/skills
+```
+
+This repository file is a readable snapshot. Agents should use the live URL when they need the current command contract.
+
 Use this document when an external agent needs to create landing pages, import code variants, launch experiments, configure tracking, read CRO reports, or run repeatable agency workflows in UXON.
 
 ## Connection Options

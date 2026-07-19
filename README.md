@@ -54,7 +54,8 @@ See [QUICKSTART.md](QUICKSTART.md) for the short setup path.
 
 - [What is UXON?](docs/what-is-uxon.md)
 - [Frequently asked questions](docs/faq.md)
-- [Agent command playbook](SKILLS.md)
+- [Latest live agent command playbook](https://uxon.ai/api/skills)
+- [Repository snapshot of the command playbook](SKILLS.md)
 
 ## Capability Guides
 
