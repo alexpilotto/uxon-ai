@@ -1,6 +1,10 @@
-# UXON FAQ For Developers And AI Agents
+# UXON FAQ For Claude Skills, Developers, And AI Agents
 
-This FAQ answers technical questions about using UXON as an API and MCP execution layer for landing pages, A/B testing, attribution, and AI-driven marketing workflows.
+This FAQ answers technical questions about using UXON as a Claude skills-style playbook, API, and MCP execution layer for landing pages, A/B testing, split testing, attribution, and AI-driven marketing workflows.
+
+## Is UXON a Claude skills repository?
+
+Yes. This repository includes a public [SKILLS.md](../SKILLS.md) agent playbook, capability-specific skill guides, MCP examples, API examples, and Help Center exports. Use the [latest live SKILLS page](https://uxon.ai/api/skills) when you need the current command contract.
 
 ## Can Claude Code create landing pages with UXON?
 

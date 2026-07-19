@@ -1,8 +1,8 @@
-# UXON Quickstart For AI Agents
+# UXON Quickstart For Claude Skills, MCP, And AI Agents
 
-UXON gives AI agents and developers a controlled way to create landing pages, launch A/B tests, configure tracking, and pull CRO reports.
+UXON gives Claude, Claude Code, AI agents, and developers a controlled way to create landing pages, launch A/B tests, run split-testing workflows, configure tracking, and pull CRO reports.
 
-Use this quickstart to connect through the API command endpoint or the Claude MCP connector.
+Use this quickstart to connect through the API command endpoint or the Claude MCP connector. For full instructions, use the [latest live SKILLS page](https://uxon.ai/api/skills) as the current Claude skill / agent playbook.
 
 ## Option 1: API Key Commands
 

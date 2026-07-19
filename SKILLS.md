@@ -1,6 +1,6 @@
 # UXON Agent Command Playbook
 
-This playbook describes the public UXON API and MCP command surface for AI agents, automation tools, and developers.
+This playbook describes the public UXON API and MCP command surface for AI agents, automation tools, and developers. It can be used as a Claude skill / Claude Code skill reference for landing page creation, CRO reporting, A/B testing, split testing, conversion tracking, and post-click optimization workflows.
 
 Latest live version:
 

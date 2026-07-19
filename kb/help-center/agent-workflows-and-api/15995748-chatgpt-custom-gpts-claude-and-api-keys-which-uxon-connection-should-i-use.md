@@ -27,7 +27,7 @@ UXON can connect to AI tools in a few different ways. Use this guide to choose t
 
 - Use **Claude custom connector** or **ChatGPT MCP** for normal team chat workflows.
 - Use **Custom GPT Actions** when you are building a private GPT and only need a controlled API-key setup.
-- Use **API key + SKILLS.md** for advanced agent platforms, scripts, or custom automation outside Claude or ChatGPT.
+- Use **API key + live SKILLS page** for advanced agent platforms, scripts, or custom automation outside Claude or ChatGPT.
 
 ## Compare options
 
@@ -36,7 +36,7 @@ UXON can connect to AI tools in a few different ways. Use this guide to choose t
 | **Claude custom connector** | Day-to-day team use in Claude | UXON OAuth | Recommended for Claude users. Each teammate signs in as themselves. |
 | **ChatGPT MCP app** | Day-to-day team use in ChatGPT | UXON OAuth | Closest OpenAI equivalent to the Claude connector. Requires ChatGPT app/developer-mode access. |
 | **Custom GPT Actions** | Private GPTs and read/reporting workflows | UXON API key | Requires an OpenAPI schema. Best kept to read/reporting commands unless your team explicitly accepts write-action risk. |
-| **API key + SKILLS.md** | Advanced agents, scripts, and automation | UXON API key | Most flexible. Your team is responsible for storing the API key securely and following the command guide. |
+| **API key + live SKILLS page** | Advanced agents, scripts, and automation | UXON API key | Most flexible. Your team is responsible for storing the API key securely and following the live command guide at `https://uxon.ai/api/skills`. |
 
 ## Choose ChatGPT MCP when
 

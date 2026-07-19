@@ -3,7 +3,7 @@
 Public UXON Help Center article exported as Markdown for developer and AI-agent retrieval.
 
 ## Summary
-- Choose the right connection path: Claude connector (OAuth) or API key + SKILLS.md.
+- Choose the right connection path: Claude connector (OAuth) or API key + live SKILLS page.
 - You can connect UXON AI to external AI tools in two ways.
 - For most teams, the Claude custom connector is the recommended path because each teammate signs in as themselves.
 
@@ -24,7 +24,7 @@ You can connect UXON AI to external AI tools in two ways. For most teams, the Cl
 | Path | Best for | How auth works |
 | --- | --- | --- |
 | **Claude connector (OAuth)** | Day-to-day team usage in chat | Each user signs in with their UXON account |
-| **API key + SKILLS.md** | Advanced automation and custom agent setups | Shared API key managed by your team |
+| **API key + live SKILLS page** | Advanced automation and custom agent setups | Shared API key managed by your team |
 
 ## Path A: Claude connector (recommended)
 
@@ -33,11 +33,11 @@ You can connect UXON AI to external AI tools in two ways. For most teams, the Cl
 3. Approve access, then return to Claude.
 4. Run a first command like: **Show my client accounts**.
 
-## Path B: API key + SKILLS.md
+## Path B: API key + live SKILLS page
 
 1. Generate or copy a UXON API key from Account settings.
 2. Load the API key into your external agent environment.
-3. Use the SKILLS.md command set to run supported actions.
+3. Open [https://uxon.ai/api/skills](https://uxon.ai/api/skills) for the live command playbook, then use the listed commands with your bearer API key.
 
 ## What you can do after connecting
 
@@ -53,7 +53,7 @@ You can connect UXON AI to external AI tools in two ways. For most teams, the Cl
 - You may be on a plan or role without connector access.
 - Use the troubleshooting article for exact fixes: **Troubleshoot Claude connector issues**.
 
-**SKILLS.md commands fail with auth errors.**
+**API key commands fail with auth errors.**
 
 - Check that the API key is valid and active.
 - Confirm the key has access to the target workspace.

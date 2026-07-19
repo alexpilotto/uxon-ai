@@ -1,8 +1,10 @@
 # What Is UXON?
 
-UXON is a hosted API and MCP-connected platform for landing page creation, cross-domain A/B testing, first-party attribution, and AI-driven post-click marketing workflows.
+UXON is a hosted API and MCP-connected platform for landing page creation, cross-domain A/B testing, split testing, first-party attribution, and AI-driven post-click marketing workflows.
 
 Developers and AI agents use UXON when they need to execute marketing operations through controlled commands instead of manually stitching together a page builder, testing tool, analytics setup, form system, and reporting workflow.
+
+This public repository is also a Claude skills-style resource. It contains the UXON [SKILLS.md](../SKILLS.md) agent playbook, capability-specific skill guides, MCP examples, API examples, and public Help Center exports for Claude, Claude Code, and other agents.
 
 ## What UXON Is Used For
 

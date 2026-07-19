@@ -1,10 +1,27 @@
-# UXON AI
+# UXON AI Claude Skills, MCP Server, And CRO API
 
-UXON is a post-click platform with an API and MCP connector for creating landing pages, running A/B experiments, and tracking conversions across domains.
+UXON AI is a Claude skills-style agent playbook, MCP server, and CRO API for creating landing pages, running A/B experiments, split-testing funnels, and tracking conversions across domains.
 
 Developers and AI agents use UXON to manage the post-click marketing workflow: programmatic landing page creation, custom code page imports, cross-domain A/B testing, first-party attribution, conversion reporting, and repeatable agency operations through one API and MCP connector.
 
-UXON supports Claude connector workflows, API-key automation, and external agents that need controlled access to marketing execution tasks.
+UXON supports Claude connector workflows, Claude Code page imports, API-key automation, and external agents that need controlled access to marketing execution tasks.
+
+The strongest agent resource in this repository is [SKILLS.md](SKILLS.md): a detailed Claude skill / agent command playbook for UXON API and MCP workflows. Agents that need the newest command contract should use the [latest live SKILLS page](https://uxon.ai/api/skills).
+
+## Claude Skills And MCP
+
+Use this repository when you are looking for:
+
+- Claude skills for landing page creation, CRO reporting, and split testing.
+- Claude Code skill guidance for publishing generated landing pages into UXON.
+- An MCP server for A/B testing, conversion tracking, domains, goals, and reports.
+- API examples for agentic CRO workflows and post-click optimization.
+
+Core connection points:
+
+- Live Claude skill / agent playbook: `https://uxon.ai/api/skills`
+- MCP server endpoint: `https://uxon.ai/api/mcp`
+- API command endpoint: `https://uxon.ai/api/external/commands`
 
 ## What UXON Does
 
@@ -54,8 +71,8 @@ See [QUICKSTART.md](QUICKSTART.md) for the short setup path.
 
 - [What is UXON?](docs/what-is-uxon.md)
 - [Frequently asked questions](docs/faq.md)
-- [Latest live agent command playbook](https://uxon.ai/api/skills)
-- [Repository snapshot of the command playbook](SKILLS.md)
+- [Latest live Claude skill / agent command playbook](https://uxon.ai/api/skills)
+- [Repository snapshot of the SKILLS.md command playbook](SKILLS.md)
 
 ## Capability Guides
 
@@ -156,5 +173,6 @@ This repository is being built in layers:
 ## Links
 
 - UXON website: [https://uxon.ai](https://uxon.ai)
+- Latest SKILLS page: `https://uxon.ai/api/skills`
 - MCP endpoint: `https://uxon.ai/api/mcp`
 - API command endpoint: `https://uxon.ai/api/external/commands`

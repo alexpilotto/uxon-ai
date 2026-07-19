@@ -21,7 +21,7 @@ UXON supports two access models: API keys and the Claude connector. They both wo
 
 ## Quick comparison
 
-| Area | Claude connector (OAuth) | API key + SKILLS.md |
+| Area | Claude connector (OAuth) | API key + live SKILLS page |
 | --- | --- | --- |
 | Who is acting | Named user account | Whoever has the key |
 | Access control | Role-based per user | Key scope and storage controls |

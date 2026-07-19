@@ -1,8 +1,8 @@
-# UXON Skill Guides
+# UXON Claude Skill Guides
 
-UXON skill guides split the public API and MCP command surface by capability so developers and AI agents can retrieve the exact workflow they need.
+UXON skill guides split the public API and MCP command surface by capability so Claude, Claude Code, developers, and AI agents can retrieve the exact workflow they need.
 
-Use these files alongside the root [SKILLS.md](../SKILLS.md), which contains the full public command playbook.
+Use these files alongside the root [SKILLS.md](../SKILLS.md), which contains the full public Claude skill / agent command playbook.
 
 ## Capability Index
 
