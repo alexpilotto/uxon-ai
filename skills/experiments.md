@@ -4,8 +4,8 @@ Run A/B tests across UXON-hosted pages, external URLs, or URL-pattern targets. T
 
 ## Core Commands
 
-- `experiments.list`: list experiments for one sub-account.
-- `experiments.get`: get one experiment's setup, status, selected goals, targeting, and saved counters.
+- `experiments.list`: list experiments for one sub-account with live all-time pixel totals.
+- `experiments.get`: get one experiment's setup, status, selected goals, targeting, and live all-time pixel totals.
 - `experiments.create`: create a draft experiment.
 - `experiments.update`: update mutable experiment settings.
 - `experiments.set_status`: move an experiment to `Draft`, `Running`, `Paused`, or `Ended`.
@@ -161,6 +161,7 @@ Do not use regex, operators, arrays, includes/contains matching, or country filt
 
 - Use `selectedGoals` for new integrations.
 - Resolve landing page variant IDs with `landing_pages.get` or `reports.landing_page.details`.
+- Treat `experiments.list` and `experiments.get` totals as live all-time pixel totals. Use `reports.experiment.*` commands for date-range reporting.
 - Do not combine the Bounce goal with other goals.
 - URL patterns can be used on control or variant, not both.
 - Confirm before setting an experiment to `Running`.

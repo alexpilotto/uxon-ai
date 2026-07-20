@@ -119,6 +119,8 @@ Claude will ask for missing inputs and call UXON tools behind the scenes.
 - Resolve IDs before writes.
 - Confirm before publishing pages or starting experiments.
 - Confirm before changing tracking or domains.
+- For MCP create-style tools, include a stable `idempotencyKey` so retries do not create duplicates.
+- Treat `tools/list` as the current MCP schema, including one-of ID requirements like `landingPageId` or `id`.
 - Use `selectedGoals` for new experiments.
 - Use valid IANA timezones, such as `Australia/Brisbane`, when passing reporting or report timezone.
 - Read back resources after write commands.

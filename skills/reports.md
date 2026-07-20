@@ -4,7 +4,7 @@ Pull CRO performance data from any agent or automation. UXON reports cover landi
 
 ## Landing Page Reports
 
-- `reports.landing_pages.summary`: aggregate landing page totals.
+- `reports.landing_pages.summary`: current landing page inventory plus date-range pixel sessions, conversions, unique conversions, and revenue.
 - `reports.landing_page.details`: detailed landing page record and variants.
 - `reports.landing_page.variant_metrics`: variant-level metrics.
 - `reports.landing_page.trends`: time-series landing page metrics.
@@ -77,6 +77,13 @@ For custom windows, send `dateRange: "custom"` with `from` and `to` as ISO-8601 
 3. Pull details for the page or experiment under review.
 4. Pull channel reports to find source-specific differences.
 5. Summarize what changed, what is trustworthy, and what should be checked next.
+
+Reporting source-of-truth:
+
+- Landing page summaries use current page inventory for page counts.
+- Landing page performance uses `pixel_sessions` and `pixel_events` inside the selected report window.
+- Landing page conversion totals exclude `PageView` and `Bounce`.
+- Experiment report commands use live pixel data and selected experiment goals.
 
 ## Related Files
 

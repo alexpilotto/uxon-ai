@@ -118,8 +118,10 @@ UXON is designed for governed agent execution. Agents should:
 1. Resolve account and resource IDs before writes.
 2. Send minimal payloads.
 3. Keep high-impact actions confirmable.
-4. Read back changed resources after write commands.
-5. Use reporting commands to close the loop after traffic starts.
+4. For MCP create-style tools, send a stable `idempotencyKey` so retries do not create duplicates.
+5. Treat `tools/list` as the current MCP schema, including one-of ID requirements like `landingPageId` or `id`.
+6. Read back changed resources after write commands.
+7. Use reporting commands to close the loop after traffic starts.
 
 Example Claude prompt:
 
