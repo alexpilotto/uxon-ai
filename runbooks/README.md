@@ -11,6 +11,7 @@ Each runbook assumes the agent has access to UXON through the API command endpoi
 - [Run a cross-domain experiment](cross-domain-experiment.md)
 - [Morning account check](morning-account-check.md)
 - [Weekly optimization cycle](weekly-optimization.md)
+- [API/MCP production smoke test](api-mcp-production-smoke-test.md)
 
 ## Shared Safety Rules
 

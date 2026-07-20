@@ -73,6 +73,7 @@ See [QUICKSTART.md](QUICKSTART.md) for the short setup path.
 - [Frequently asked questions](docs/faq.md)
 - [Latest live Claude skill / agent command playbook](https://uxon.ai/api/skills)
 - [Repository snapshot of the SKILLS.md command playbook](SKILLS.md)
+- [API/MCP production smoke test](runbooks/api-mcp-production-smoke-test.md)
 
 ## Capability Guides
 
