@@ -128,6 +128,7 @@ Successful response shape:
 - Unknown commands are rejected.
 - Commands are rate-limited and logged per key.
 - MCP high-impact write tools require explicit user approval. When the user has approved the action, retry the MCP tool with `confirm: true`.
+- MCP OAuth sessions should have both `uxon:read` and `uxon:write`; read-only sessions cannot run write tools.
 - MCP create-style tools must include a stable `idempotencyKey` so retries do not create duplicates.
 - MCP `tools/list` is the source of truth for connector schemas, including one-of identifier requirements such as `landingPageId` or `id`.
 - Direct External API commands do not use `confirm` or `idempotencyKey` in the request body unless the command schema lists them.

@@ -15,7 +15,7 @@ Use this checklist after UXON API/MCP changes are deployed.
 ## Claude MCP Test Sequence
 
 1. Run `uxon_healthcheck`.
-   Expected: correct team/org context.
+   Expected: correct team/org context and scope includes `uxon:read uxon:write`.
 
 2. Run `tools/list`.
    Expected: write tools show `confirm` where required, create-style tools show required `idempotencyKey`, and ID-based tools show accepted one-of fields such as `landingPageId` or `id`.
