@@ -30,7 +30,7 @@ Core connection points:
 - Launch A/B experiments across UXON pages, external URLs, or URL-pattern targets.
 - Track conversions with first-party attribution across pages, variants, channels, contacts, and revenue events.
 - Configure tracking through GTM or direct GA4/Meta setup with duplicate-loading guardrails.
-- Inspect and adjust saved sub-account branding, including color variables, brand colors, and brand voice.
+- Inspect and adjust saved sub-account branding, including color variables, brand colors, logo URLs, and brand voice.
 - Pull CRO reports from agents, automations, dashboards, and recurring workflows.
 - Onboard agency client accounts with branding, tracking, domain, and reporting setup.
 
@@ -109,7 +109,7 @@ High-value command families include:
 - `landing_pages.*` for blank page creation, AI brief generation, job polling, variant operations, publishing, review links, duplication, deletion, and custom code uploads.
 - `experiments.*` for draft creation, inspection, targeting updates, lifecycle changes, and cross-domain testing.
 - `reports.*` for landing page, experiment, channel, trend, contact, and revenue reporting.
-- `branding.*` for branding overview and safe color/voice adjustments.
+- `branding.*` for branding overview and safe color, logo, and voice adjustments.
 - `tracking.setup` for GTM or direct GA4/Meta setup.
 - `goals.*` for conversion goal management.
 - `domains.*` for connected domain workflows.

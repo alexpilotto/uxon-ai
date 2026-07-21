@@ -7,7 +7,7 @@ Use these files alongside the root [SKILLS.md](../SKILLS.md), which contains the
 ## Capability Index
 
 - [Landing pages](landing-pages.md): create blank pages, submit AI briefs, poll generation, manage variants, publish pages, upload custom code variants, and read page reports.
-- [Branding](branding.md): inspect branding readiness and adjust color variables, brand colors, palette name, and brand voice.
+- [Branding](branding.md): inspect branding readiness and adjust color variables, brand colors, logo URLs, palette name, and brand voice.
 - [Experiments](experiments.md): create, inspect, update, launch, pause, and report on A/B tests across UXON pages, external URLs, and URL-pattern targets.
 - [Conversion tracking](conversion-tracking.md): configure GTM or direct GA4/Meta setup with duplicate-loading guardrails.
 - [Domains](domains.md): list, add, and connect domains for landing page publishing and tracking.

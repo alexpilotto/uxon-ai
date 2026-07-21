@@ -217,7 +217,8 @@ Agent contract:
 - Use `branding.get` after sub-account creation or before landing page work to inspect saved brand colors, logos, fonts, voice, and readiness.
 - Use `branding.update` only when the user explicitly requests manual brand adjustments.
 - `branding.update` is partial: send only the fields the user wants to change and preserve everything else.
-- Logo upload/import is handled by separate branding/logo workflows where available; do not attempt logo updates through `branding.update`.
+- Branding logo roles are based on the logo artwork colour: `logo.light` is a light-coloured or white logo for dark backgrounds; `logo.dark` is a dark-coloured logo for light backgrounds; `logo.favicon` is the square browser/app icon.
+- `branding.update` can replace the active URL for `logo.light`, `logo.dark`, and `logo.favicon`. Use the web app or dedicated logo workflows for binary file uploads when no direct image URL exists.
 - After write commands, read back the changed object and confirm the saved values.
 
 ## 8) Full Command Catalog
@@ -234,8 +235,8 @@ Agent contract:
 - `subaccounts.update`: Update sub-account profile fields, reporting currency, reporting timezone, or feedback mode.
 
 ### Branding
-- `branding.get`: Fetch a sub-account branding overview including color variables, brand colors, palettes, logos, fonts, brand voice, and readiness flags.
-- `branding.update`: Update editable sub-account branding fields such as color variables, brand colors, palette name, and brand voice.
+- `branding.get`: Fetch a sub-account branding overview including color variables, brand colors, logo URLs, palettes, fonts, brand voice, and readiness flags.
+- `branding.update`: Update editable sub-account branding fields such as color variables, brand colors, logo URLs, palette name, and brand voice.
 
 ### Landing pages
 - `landing_pages.list`: List landing pages for a sub-account.
@@ -343,7 +344,7 @@ Sequence:
 2. `subaccounts.create`
 3. UXON automatically starts brand import and website media scraping after create.
 4. `branding.get` to inspect color variables, brand colors, logos, fonts, brand voice, and readiness.
-5. Optional only when requested: `branding.update` for manual brand adjustments, then `branding.get` again to confirm.
+5. Optional only when requested: `branding.update` for manual color, logo, or voice adjustments, then `branding.get` again to confirm.
 6. `tracking.setup`
 7. `domains.add`
 8. `domains.connect`
@@ -586,6 +587,7 @@ Expected output keys:
 
 - `data.branding.colorVariables`
 - `data.branding.brandColors`
+- `data.branding.logo`
 - `data.branding.colorPalettes[]`
 - `data.branding.logos[]`
 - `data.branding.brandVoice`
@@ -615,6 +617,11 @@ Example `data.branding` shape:
     "#2F2217",
     "#FFFFFF"
   ],
+  "logo": {
+    "light": "https://example.com/logo-light.svg",
+    "dark": "https://example.com/logo-dark.svg",
+    "favicon": "https://example.com/favicon.png"
+  },
   "logos": [],
   "brandVoice": "",
   "fontVariables": null,
@@ -633,7 +640,9 @@ Readiness notes:
 
 - `readiness.isReady` means UXON has color variables, brand colors, and at least one logo.
 - `hasBrandVoice` and `hasFonts` are useful quality signals, not hard blockers.
-- Missing logos should be handled through branding/logo workflows where available, not through `branding.update`.
+- `logo.light` is the light-coloured or white logo variant used on dark backgrounds.
+- `logo.dark` is the dark-coloured logo variant used on light backgrounds.
+- `logo.favicon` is the square icon used for browser/app metadata.
 
 Common failures:
 
@@ -656,6 +665,7 @@ Editable fields:
 
 - `colorVariables`: named landing page colors.
 - `brandColors`: ordered palette array. Send only when replacing the saved palette.
+- `logo`: direct HTTP/HTTPS image URLs by role.
 - `paletteName`: current palette label.
 - `brandVoice`: brand voice guidance text.
 
@@ -686,7 +696,12 @@ Validation notes:
 - Color values must be 3- or 6-digit hex values, with or without `#`.
 - UXON normalizes saved values to uppercase `#RRGGBB`.
 - `button` maps to UXON's primary button background color.
-- Logo upload/import is not part of this command.
+- Logo values must be direct HTTP/HTTPS image URLs.
+- `logo.light` should be a light-coloured or white logo for dark backgrounds.
+- `logo.dark` should be a dark-coloured logo for light backgrounds.
+- `logo.favicon` should be a square browser/app icon.
+- Omitted logo roles are preserved.
+- Use the web app or dedicated logo workflows for binary file uploads when no direct image URL exists.
 - Run `branding.get` after every update and confirm the saved values.
 
 Request example:
@@ -715,13 +730,18 @@ Request example:
       "#2F2217",
       "#FFFFFF"
     ],
+    "logo": {
+      "light": "https://example.com/logo-light.svg",
+      "dark": "https://example.com/logo-dark.svg",
+      "favicon": "https://example.com/favicon.png"
+    },
     "paletteName": "Brand colours",
     "brandVoice": "Clear, useful, confident, and specific. Avoid hype."
   }
 }
 ```
 
-Minimal partial update:
+Partial update example:
 
 ```json
 {
@@ -731,6 +751,9 @@ Minimal partial update:
     "colorVariables": {
       "button": "#F8C80B",
       "buttonText": "#111111"
+    },
+    "logo": {
+      "dark": "https://example.com/logo-dark.svg"
     }
   }
 }
@@ -744,7 +767,7 @@ Expected output keys:
 
 Common failures:
 
-- `400` no editable fields, invalid color, or missing `siteId`
+- `400` no editable fields, invalid color, invalid logo URL, or missing `siteId`
 - `404` sub-account not found
 
 ---

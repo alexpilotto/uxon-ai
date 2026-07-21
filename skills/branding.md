@@ -6,8 +6,8 @@ Branding data is used by UXON when creating blank landing pages and AI-generated
 
 ## Core Commands
 
-- `branding.get`: fetch color variables, brand colors, palettes, logos, font variables, brand voice, and readiness flags for a sub-account.
-- `branding.update`: update editable branding fields: color variables, brand colors, palette name, and brand voice.
+- `branding.get`: fetch color variables, brand colors, logo URLs, palettes, font variables, brand voice, and readiness flags for a sub-account.
+- `branding.update`: update editable branding fields: color variables, brand colors, logo URLs, palette name, and brand voice.
 
 MCP tool names use underscores:
 
@@ -29,6 +29,7 @@ Expected output keys:
 
 - `data.branding.colorVariables`
 - `data.branding.brandColors`
+- `data.branding.logo`
 - `data.branding.colorPalettes[]`
 - `data.branding.logos[]`
 - `data.branding.brandVoice`
@@ -59,6 +60,11 @@ Example output shape:
       "#2F2217",
       "#FFFFFF"
     ],
+    "logo": {
+      "light": "https://example.com/logo-light.svg",
+      "dark": "https://example.com/logo-dark.svg",
+      "favicon": "https://example.com/favicon.png"
+    },
     "logos": [],
     "brandVoice": "",
     "fontVariables": null,
@@ -78,7 +84,9 @@ Readiness notes:
 
 - `isReady` means UXON has color variables, brand colors, and at least one logo.
 - `hasBrandVoice` and `hasFonts` are quality signals, not hard blockers.
-- Missing logos should be handled through branding/logo workflows where available, not `branding.update`.
+- `logo.light` is the light-coloured or white logo variant used on dark backgrounds.
+- `logo.dark` is the dark-coloured logo variant used on light backgrounds.
+- `logo.favicon` is the square icon used for browser/app metadata.
 
 ## Update Branding
 
@@ -108,13 +116,18 @@ Readiness notes:
       "#2F2217",
       "#FFFFFF"
     ],
+    "logo": {
+      "light": "https://example.com/logo-light.svg",
+      "dark": "https://example.com/logo-dark.svg",
+      "favicon": "https://example.com/favicon.png"
+    },
     "paletteName": "Brand colours",
     "brandVoice": "Clear, useful, confident, and specific. Avoid hype."
   }
 }
 ```
 
-Minimal partial update:
+Partial update example:
 
 ```json
 {
@@ -124,6 +137,9 @@ Minimal partial update:
     "colorVariables": {
       "button": "#F8C80B",
       "buttonText": "#111111"
+    },
+    "logo": {
+      "dark": "https://example.com/logo-dark.svg"
     }
   }
 }
@@ -133,8 +149,15 @@ Editable fields:
 
 - `colorVariables`: named landing page colors.
 - `brandColors`: ordered palette array. Send only when replacing the palette.
+- `logo`: direct HTTP/HTTPS image URLs by role.
 - `paletteName`: current palette label.
 - `brandVoice`: brand voice guidance text.
+
+Logo role meaning:
+
+- `logo.light`: light-coloured or white logo used on dark backgrounds.
+- `logo.dark`: dark-coloured logo used on light backgrounds.
+- `logo.favicon`: square browser/app icon.
 
 Preferred `colorVariables` keys:
 
@@ -162,7 +185,9 @@ Validation notes:
 - Color values must be 3- or 6-digit hex values, with or without `#`.
 - UXON normalizes saved values to uppercase `#RRGGBB`.
 - `button` maps to UXON's primary button background color.
-- Logo upload/import is not part of this command.
+- Logo values must be direct HTTP/HTTPS image URLs.
+- Omitted logo roles are preserved.
+- Use the web app or dedicated logo workflows for binary file uploads when no direct image URL exists.
 
 Expected output keys:
 

@@ -58,10 +58,15 @@ Optional manual adjustment, only when requested:
       "button": "#F8C80B",
       "buttonText": "#111111"
     },
+    "logo": {
+      "dark": "https://example.com/logo-dark.svg"
+    },
     "brandVoice": "Clear, useful, confident, and specific. Avoid hype."
   }
 }
 ```
+
+Logo role meaning: `logo.light` is a light-coloured or white logo for dark backgrounds, `logo.dark` is a dark-coloured logo for light backgrounds, and `logo.favicon` is the square browser/app icon.
 
 After any update, run `branding.get` again and confirm the saved values.
 
