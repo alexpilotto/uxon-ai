@@ -34,6 +34,12 @@ curl -sS -X POST "${COMMAND_URL}" \
       \"logo\": {
         \"dark\": \"https://example.com/logo-dark.svg\"
       },
+      \"fonts\": {
+        \"buttons\": {
+          \"source\": \"heading\",
+          \"fontWeight\": \"600 - Semi-Bold\"
+        }
+      },
       \"brandVoice\": \"Clear, useful, confident, and specific. Avoid hype.\"
     }
   }"

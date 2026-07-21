@@ -6,8 +6,8 @@ Branding data is used by UXON when creating blank landing pages and AI-generated
 
 ## Core Commands
 
-- `branding.get`: fetch color variables, brand colors, logo URLs, palettes, font variables, brand voice, and readiness flags for a sub-account.
-- `branding.update`: update editable branding fields: color variables, brand colors, logo URLs, palette name, and brand voice.
+- `branding.get`: fetch color variables, brand colors, logo URLs, palettes, font variables, custom fonts, brand voice, and readiness flags for a sub-account.
+- `branding.update`: update editable branding fields: color variables, brand colors, logo URLs, font variables, custom font URL imports, palette name, and brand voice.
 
 MCP tool names use underscores:
 
@@ -33,7 +33,9 @@ Expected output keys:
 - `data.branding.colorPalettes[]`
 - `data.branding.logos[]`
 - `data.branding.brandVoice`
+- `data.branding.fonts`
 - `data.branding.fontVariables`
+- `data.branding.customFonts[]`
 - `data.branding.readiness`
 
 Example output shape:
@@ -67,7 +69,50 @@ Example output shape:
     },
     "logos": [],
     "brandVoice": "",
-    "fontVariables": null,
+    "fonts": {
+      "headings": {
+        "fontFamily": "Inter",
+        "fontWeight": "700 - Bold",
+        "uppercase": false,
+        "google": true
+      },
+      "bodyText": {
+        "fontFamily": "Inter",
+        "fontWeight": "400 - Regular",
+        "uppercase": false,
+        "google": true
+      },
+      "buttons": {
+        "fontFamily": "",
+        "fontWeight": "500 - Medium",
+        "uppercase": false,
+        "google": false,
+        "source": "heading"
+      }
+    },
+    "fontVariables": {
+      "headings": {
+        "fontFamily": "Inter",
+        "fontWeight": "700 - Bold",
+        "uppercase": false,
+        "google": true
+      },
+      "bodyText": {
+        "fontFamily": "Inter",
+        "fontWeight": "400 - Regular",
+        "uppercase": false,
+        "google": true
+      },
+      "buttons": {
+        "fontFamily": "",
+        "fontWeight": "500 - Medium",
+        "uppercase": false,
+        "google": false,
+        "source": "heading"
+      },
+      "updatedAt": "2026-07-21T00:00:00.000Z"
+    },
+    "customFonts": [],
     "readiness": {
       "hasColorVariables": true,
       "hasBrandColors": true,
@@ -121,6 +166,42 @@ Readiness notes:
       "dark": "https://example.com/logo-dark.svg",
       "favicon": "https://example.com/favicon.png"
     },
+    "fonts": {
+      "headings": {
+        "fontFamily": "Inter",
+        "fontWeight": "700 - Bold",
+        "uppercase": false,
+        "google": true
+      },
+      "bodyText": {
+        "fontFamily": "Inter",
+        "fontWeight": "400 - Regular",
+        "uppercase": false,
+        "google": true
+      },
+      "buttons": {
+        "source": "heading",
+        "fontWeight": "600 - Semi-Bold",
+        "uppercase": false
+      }
+    },
+    "customFonts": [
+      {
+        "name": "Brand Sans",
+        "variants": [
+          {
+            "url": "https://cdn.example.com/fonts/brand-sans-400.woff2",
+            "weight": "400",
+            "style": "Normal"
+          },
+          {
+            "url": "https://cdn.example.com/fonts/brand-sans-700.woff2",
+            "weight": "700",
+            "style": "Normal"
+          }
+        ]
+      }
+    ],
     "paletteName": "Brand colours",
     "brandVoice": "Clear, useful, confident, and specific. Avoid hype."
   }
@@ -140,6 +221,12 @@ Partial update example:
     },
     "logo": {
       "dark": "https://example.com/logo-dark.svg"
+    },
+    "fonts": {
+      "buttons": {
+        "source": "heading",
+        "fontWeight": "600 - Semi-Bold"
+      }
     }
   }
 }
@@ -150,6 +237,8 @@ Editable fields:
 - `colorVariables`: named landing page colors.
 - `brandColors`: ordered palette array. Send only when replacing the palette.
 - `logo`: direct HTTP/HTTPS image URLs by role.
+- `fonts`: heading/body/button font variables. Supported slots are `headings`, `bodyText`, and `buttons`. Each slot accepts `fontFamily`, `fontWeight`, `uppercase`, `google`, and for buttons `source: "heading" | "body"`.
+- `customFonts`: custom font URL imports. Each font needs a `name` and one or more direct `.woff2`, `.woff`, `.ttf`, or `.otf` URLs. UXON imports and hosts successful files.
 - `paletteName`: current palette label.
 - `brandVoice`: brand voice guidance text.
 
@@ -187,7 +276,10 @@ Validation notes:
 - `button` maps to UXON's primary button background color.
 - Logo values must be direct HTTP/HTTPS image URLs.
 - Omitted logo roles are preserved.
+- Font weights can use UXON labels such as `400 - Regular` and `700 - Bold`, or numeric weights such as `400` and `700`.
+- Omitted font slots are preserved.
 - Use the web app or dedicated logo workflows for binary file uploads when no direct image URL exists.
+- Use the web app or dedicated font upload workflow for binary font uploads when no direct font URL exists.
 
 Expected output keys:
 

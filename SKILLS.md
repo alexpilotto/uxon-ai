@@ -219,6 +219,8 @@ Agent contract:
 - `branding.update` is partial: send only the fields the user wants to change and preserve everything else.
 - Branding logo roles are based on the logo artwork colour: `logo.light` is a light-coloured or white logo for dark backgrounds; `logo.dark` is a dark-coloured logo for light backgrounds; `logo.favicon` is the square browser/app icon.
 - `branding.update` can replace the active URL for `logo.light`, `logo.dark`, and `logo.favicon`. Use the web app or dedicated logo workflows for binary file uploads when no direct image URL exists.
+- `branding.update` can update `fonts.headings`, `fonts.bodyText`, and `fonts.buttons`. Use UXON weight labels such as `400 - Regular` or `700 - Bold`, or numeric weights such as `400` and `700`.
+- `customFonts` imports must use direct `.woff2`, `.woff`, `.ttf`, or `.otf` URLs. UXON downloads, converts when needed, hosts the web font, and saves the `@font-face` CSS. Use the web app or upload workflow for binary font files.
 - After write commands, read back the changed object and confirm the saved values.
 
 ## 8) Full Command Catalog
@@ -236,7 +238,7 @@ Agent contract:
 
 ### Branding
 - `branding.get`: Fetch a sub-account branding overview including color variables, brand colors, logo URLs, palettes, fonts, brand voice, and readiness flags.
-- `branding.update`: Update editable sub-account branding fields such as color variables, brand colors, logo URLs, palette name, and brand voice.
+- `branding.update`: Update editable sub-account branding fields such as color variables, brand colors, logo URLs, font variables, custom font URL imports, palette name, and brand voice.
 
 ### Landing pages
 - `landing_pages.list`: List landing pages for a sub-account.
@@ -344,7 +346,7 @@ Sequence:
 2. `subaccounts.create`
 3. UXON automatically starts brand import and website media scraping after create.
 4. `branding.get` to inspect color variables, brand colors, logos, fonts, brand voice, and readiness.
-5. Optional only when requested: `branding.update` for manual color, logo, or voice adjustments, then `branding.get` again to confirm.
+5. Optional only when requested: `branding.update` for manual color, logo, font, custom font, or voice adjustments, then `branding.get` again to confirm.
 6. `tracking.setup`
 7. `domains.add`
 8. `domains.connect`
@@ -591,7 +593,9 @@ Expected output keys:
 - `data.branding.colorPalettes[]`
 - `data.branding.logos[]`
 - `data.branding.brandVoice`
+- `data.branding.fonts`
 - `data.branding.fontVariables`
+- `data.branding.customFonts[]`
 - `data.branding.readiness`
 
 Example `data.branding` shape:
@@ -624,7 +628,50 @@ Example `data.branding` shape:
   },
   "logos": [],
   "brandVoice": "",
-  "fontVariables": null,
+  "fonts": {
+    "headings": {
+      "fontFamily": "Inter",
+      "fontWeight": "700 - Bold",
+      "uppercase": false,
+      "google": true
+    },
+    "bodyText": {
+      "fontFamily": "Inter",
+      "fontWeight": "400 - Regular",
+      "uppercase": false,
+      "google": true
+    },
+    "buttons": {
+      "fontFamily": "",
+      "fontWeight": "500 - Medium",
+      "uppercase": false,
+      "google": false,
+      "source": "heading"
+    }
+  },
+  "fontVariables": {
+    "headings": {
+      "fontFamily": "Inter",
+      "fontWeight": "700 - Bold",
+      "uppercase": false,
+      "google": true
+    },
+    "bodyText": {
+      "fontFamily": "Inter",
+      "fontWeight": "400 - Regular",
+      "uppercase": false,
+      "google": true
+    },
+    "buttons": {
+      "fontFamily": "",
+      "fontWeight": "500 - Medium",
+      "uppercase": false,
+      "google": false,
+      "source": "heading"
+    },
+    "updatedAt": "2026-07-21T00:00:00.000Z"
+  },
+  "customFonts": [],
   "readiness": {
     "hasColorVariables": true,
     "hasBrandColors": true,
@@ -654,7 +701,7 @@ Common failures:
 Purpose:
 
 - Apply explicit manual branding adjustments for a sub-account.
-- Use this for quick color variable, palette, or brand voice corrections before landing page work.
+- Use this for quick color variable, palette, logo, font, custom font, or brand voice corrections before landing page work.
 
 Required input:
 
@@ -666,6 +713,8 @@ Editable fields:
 - `colorVariables`: named landing page colors.
 - `brandColors`: ordered palette array. Send only when replacing the saved palette.
 - `logo`: direct HTTP/HTTPS image URLs by role.
+- `fonts`: heading/body/button font variables. Supported slots are `headings`, `bodyText`, and `buttons`. Each slot accepts `fontFamily`, `fontWeight`, `uppercase`, `google`, and for buttons `source: "heading" | "body"`.
+- `customFonts`: custom font URL imports. Each font needs a `name` and one or more direct `.woff2`, `.woff`, `.ttf`, or `.otf` URLs. UXON imports and hosts successful files.
 - `paletteName`: current palette label.
 - `brandVoice`: brand voice guidance text.
 
@@ -695,13 +744,16 @@ Validation notes:
 - This command is partial. Omitted fields are preserved.
 - Color values must be 3- or 6-digit hex values, with or without `#`.
 - UXON normalizes saved values to uppercase `#RRGGBB`.
+- Font weights can use UXON labels such as `400 - Regular` and `700 - Bold`, or numeric weights such as `400` and `700`.
 - `button` maps to UXON's primary button background color.
 - Logo values must be direct HTTP/HTTPS image URLs.
 - `logo.light` should be a light-coloured or white logo for dark backgrounds.
 - `logo.dark` should be a dark-coloured logo for light backgrounds.
 - `logo.favicon` should be a square browser/app icon.
 - Omitted logo roles are preserved.
+- Omitted font slots are preserved.
 - Use the web app or dedicated logo workflows for binary file uploads when no direct image URL exists.
+- Use the web app or dedicated font upload workflow for binary font uploads when no direct font URL exists.
 - Run `branding.get` after every update and confirm the saved values.
 
 Request example:
@@ -735,6 +787,42 @@ Request example:
       "dark": "https://example.com/logo-dark.svg",
       "favicon": "https://example.com/favicon.png"
     },
+    "fonts": {
+      "headings": {
+        "fontFamily": "Inter",
+        "fontWeight": "700 - Bold",
+        "uppercase": false,
+        "google": true
+      },
+      "bodyText": {
+        "fontFamily": "Inter",
+        "fontWeight": "400 - Regular",
+        "uppercase": false,
+        "google": true
+      },
+      "buttons": {
+        "source": "heading",
+        "fontWeight": "600 - Semi-Bold",
+        "uppercase": false
+      }
+    },
+    "customFonts": [
+      {
+        "name": "Brand Sans",
+        "variants": [
+          {
+            "url": "https://cdn.example.com/fonts/brand-sans-400.woff2",
+            "weight": "400",
+            "style": "Normal"
+          },
+          {
+            "url": "https://cdn.example.com/fonts/brand-sans-700.woff2",
+            "weight": "700",
+            "style": "Normal"
+          }
+        ]
+      }
+    ],
     "paletteName": "Brand colours",
     "brandVoice": "Clear, useful, confident, and specific. Avoid hype."
   }
@@ -754,6 +842,12 @@ Partial update example:
     },
     "logo": {
       "dark": "https://example.com/logo-dark.svg"
+    },
+    "fonts": {
+      "buttons": {
+        "source": "heading",
+        "fontWeight": "600 - Semi-Bold"
+      }
     }
   }
 }
@@ -767,7 +861,7 @@ Expected output keys:
 
 Common failures:
 
-- `400` no editable fields, invalid color, invalid logo URL, or missing `siteId`
+- `400` no editable fields, invalid color, invalid logo URL, invalid font URL, or missing `siteId`
 - `404` sub-account not found
 
 ---

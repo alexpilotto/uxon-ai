@@ -61,12 +61,20 @@ Optional manual adjustment, only when requested:
     "logo": {
       "dark": "https://example.com/logo-dark.svg"
     },
+    "fonts": {
+      "buttons": {
+        "source": "heading",
+        "fontWeight": "600 - Semi-Bold"
+      }
+    },
     "brandVoice": "Clear, useful, confident, and specific. Avoid hype."
   }
 }
 ```
 
 Logo role meaning: `logo.light` is a light-coloured or white logo for dark backgrounds, `logo.dark` is a dark-coloured logo for light backgrounds, and `logo.favicon` is the square browser/app icon.
+
+Custom font imports are optional and only when requested. Use direct `.woff2`, `.woff`, `.ttf`, or `.otf` URLs in `customFonts`; use the web app/upload workflow for binary font files.
 
 After any update, run `branding.get` again and confirm the saved values.
 
