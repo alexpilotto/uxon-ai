@@ -8,7 +8,7 @@ Onboard a new client by creating a sub-account, setting conversion goals, creati
 - Website URL.
 - Reporting currency, such as `USD`, `AUD`, or `GBP`.
 - Reporting timezone when known, as an IANA timezone such as `Australia/Brisbane`. Do not add friction if unknown.
-- Landing page feedback mode, usually `ai_approvals`.
+- Landing page feedback mode, usually `free_comments`.
 - First conversion goal, such as `Qualified Lead`, `Phone Call`, or `Purchase`.
 - Preferred publishing domain or subdomain.
 - Tracking mode: `gtm` or `direct`.
@@ -34,7 +34,38 @@ Do not ask for brand colors, typography, voice, logo URL, or media assets during
 
 Save the returned `siteId`.
 
-### 2. Create The First Goal
+### 2. Check Branding Overview
+
+```json
+{
+  "command": "branding.get",
+  "input": {
+    "siteId": "site_uuid"
+  }
+}
+```
+
+Use this to confirm current color variables, brand colors, logos, fonts, brand voice, and readiness.
+
+Optional manual adjustment, only when requested:
+
+```json
+{
+  "command": "branding.update",
+  "input": {
+    "siteId": "site_uuid",
+    "colorVariables": {
+      "button": "#F8C80B",
+      "buttonText": "#111111"
+    },
+    "brandVoice": "Clear, useful, confident, and specific. Avoid hype."
+  }
+}
+```
+
+After any update, run `branding.get` again and confirm the saved values.
+
+### 3. Create The First Goal
 
 ```json
 {
@@ -47,7 +78,7 @@ Save the returned `siteId`.
 }
 ```
 
-### 3. Create The First Blank Landing Page
+### 4. Create The First Blank Landing Page
 
 ```json
 {
@@ -61,7 +92,7 @@ Save the returned `siteId`.
 
 Use `landing_pages.generate_from_brief` instead when the user wants UXON AI to create the page from a brief.
 
-### 4. Add The Domain
+### 5. Add The Domain
 
 ```json
 {
@@ -74,7 +105,7 @@ Use `landing_pages.generate_from_brief` instead when the user wants UXON AI to c
 }
 ```
 
-### 5. Connect The Domain
+### 6. Connect The Domain
 
 ```json
 {
@@ -85,7 +116,7 @@ Use `landing_pages.generate_from_brief` instead when the user wants UXON AI to c
 }
 ```
 
-### 6. Configure Tracking
+### 7. Configure Tracking
 
 ```json
 {
@@ -103,6 +134,7 @@ Use `landing_pages.generate_from_brief` instead when the user wants UXON AI to c
 
 - Sub-account exists.
 - Brand/media import has been triggered from the website URL.
+- Branding overview has been inspected and any explicit manual adjustments have been saved.
 - At least one conversion goal exists.
 - First landing page draft exists.
 - Domain is added and DNS instructions are available or verified.

@@ -6,6 +6,7 @@ These examples show how developers and AI agents can call UXON from shell script
 
 - [Create a blank landing page](curl/create-landing-page.sh)
 - [Generate an AI landing page from brief](curl/generate-ai-landing-page.sh)
+- [Read and update branding](curl/branding-overview-and-update.sh)
 - [Launch an experiment draft](curl/launch-experiment.sh)
 - [Set up GTM tracking](curl/setup-tracking.sh)
 - [Pull an experiment report](curl/pull-report.sh)

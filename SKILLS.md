@@ -214,6 +214,10 @@ Agent contract:
 - For MCP create tools, send a unique `idempotencyKey`, for example `client-page-2026-07-20-001`.
 - For timezone, pass an IANA timezone if the user has supplied locality or timezone. Ask only when it affects reporting and cannot be inferred from the request.
 - For client onboarding, do not ask for brand colors, typography, voice, or logo URL unless the user explicitly wants manual branding overrides.
+- Use `branding.get` after sub-account creation or before landing page work to inspect saved brand colors, logos, fonts, voice, and readiness.
+- Use `branding.update` only when the user explicitly requests manual brand adjustments.
+- `branding.update` is partial: send only the fields the user wants to change and preserve everything else.
+- Logo upload/import is handled by separate branding/logo workflows where available; do not attempt logo updates through `branding.update`.
 - After write commands, read back the changed object and confirm the saved values.
 
 ## 8) Full Command Catalog
@@ -228,6 +232,10 @@ Agent contract:
 - `subaccounts.get`: Fetch details and totals for a single sub-account.
 - `subaccounts.create`: Create a new sub-account with website URL, reporting currency, reporting timezone, and feedback mode.
 - `subaccounts.update`: Update sub-account profile fields, reporting currency, reporting timezone, or feedback mode.
+
+### Branding
+- `branding.get`: Fetch a sub-account branding overview including color variables, brand colors, palettes, logos, fonts, brand voice, and readiness flags.
+- `branding.update`: Update editable sub-account branding fields such as color variables, brand colors, palette name, and brand voice.
 
 ### Landing pages
 - `landing_pages.list`: List landing pages for a sub-account.
@@ -300,12 +308,13 @@ For every action, follow this order:
 When you do not have IDs, use this sequence:
 
 1. `subaccounts.list` to get `siteId`.
-2. `goals.list` to get goal IDs for `selectedGoals`.
-3. `landing_pages.list` for landing page IDs.
-4. `reports.landing_page.details` for landing page variant IDs.
-5. `experiments.list` for experiment IDs.
-6. `domains.list` for domain IDs.
-7. `reports.contacts.list` for contact IDs.
+2. `branding.get` to inspect brand readiness for that `siteId`.
+3. `goals.list` to get goal IDs for `selectedGoals`.
+4. `landing_pages.list` for landing page IDs.
+5. `reports.landing_page.details` for landing page variant IDs.
+6. `experiments.list` for experiment IDs.
+7. `domains.list` for domain IDs.
+8. `reports.contacts.list` for contact IDs.
 
 ## 11) High-Value Agency Runbooks
 
@@ -333,10 +342,12 @@ Sequence:
 1. Ask for client name, website URL, reporting currency (default `USD`), reporting timezone only if the client timezone is not known (IANA format; default `UTC`), and landing page feedback mode (default `free_comments`).
 2. `subaccounts.create`
 3. UXON automatically starts brand import and website media scraping after create.
-4. `tracking.setup`
-5. `domains.add`
-6. `domains.connect`
-7. Optional after setup: `goals.create`, `landing_pages.generate_from_brief` for an AI page, or `landing_pages.create` for a blank builder page, then `landing_pages.set_status` when ready.
+4. `branding.get` to inspect color variables, brand colors, logos, fonts, brand voice, and readiness.
+5. Optional only when requested: `branding.update` for manual brand adjustments, then `branding.get` again to confirm.
+6. `tracking.setup`
+7. `domains.add`
+8. `domains.connect`
+9. Optional after setup: `goals.create`, `landing_pages.generate_from_brief` for an AI page, or `landing_pages.create` for a blank builder page, then `landing_pages.set_status` when ready.
 
 ### C) Launch a UXON-page experiment safely
 
@@ -541,6 +552,199 @@ Expected output keys:
 Common failures:
 
 - `400` invalid `websiteUrl`
+- `404` sub-account not found
+
+---
+
+## Branding
+
+Branding commands inspect and adjust the saved branding used by blank builder pages and AI-generated landing pages.
+
+### `branding.get`
+
+Purpose:
+
+- Fetch a concise branding overview for one sub-account.
+- Use this after `subaccounts.create`, before manual page building, or before launching AI generation.
+
+Required input:
+
+- `siteId`
+
+Request example:
+
+```json
+{
+  "command": "branding.get",
+  "input": {
+    "siteId": "site_uuid"
+  }
+}
+```
+
+Expected output keys:
+
+- `data.branding.colorVariables`
+- `data.branding.brandColors`
+- `data.branding.colorPalettes[]`
+- `data.branding.logos[]`
+- `data.branding.brandVoice`
+- `data.branding.fontVariables`
+- `data.branding.readiness`
+
+Example `data.branding` shape:
+
+```json
+{
+  "colorVariables": {
+    "pageBackground": "#FFFFFF",
+    "headings": "#2F2217",
+    "bodyText": "#343433",
+    "button": "#F8C80B",
+    "buttonText": "#111111",
+    "lightBackground": "#F7F7E0",
+    "darkBackground": "#2F2217",
+    "starRating": "#FDBF01"
+  },
+  "brandColors": [
+    "#F8C80B",
+    "#947C1C",
+    "#343433",
+    "#AA7944",
+    "#E4D3B2",
+    "#2F2217",
+    "#FFFFFF"
+  ],
+  "logos": [],
+  "brandVoice": "",
+  "fontVariables": null,
+  "readiness": {
+    "hasColorVariables": true,
+    "hasBrandColors": true,
+    "hasLogo": false,
+    "hasBrandVoice": false,
+    "hasFonts": false,
+    "isReady": false
+  }
+}
+```
+
+Readiness notes:
+
+- `readiness.isReady` means UXON has color variables, brand colors, and at least one logo.
+- `hasBrandVoice` and `hasFonts` are useful quality signals, not hard blockers.
+- Missing logos should be handled through branding/logo workflows where available, not through `branding.update`.
+
+Common failures:
+
+- `400` missing `siteId`
+- `404` sub-account not found
+
+### `branding.update`
+
+Purpose:
+
+- Apply explicit manual branding adjustments for a sub-account.
+- Use this for quick color variable, palette, or brand voice corrections before landing page work.
+
+Required input:
+
+- `siteId`
+- At least one editable field.
+
+Editable fields:
+
+- `colorVariables`: named landing page colors.
+- `brandColors`: ordered palette array. Send only when replacing the saved palette.
+- `paletteName`: current palette label.
+- `brandVoice`: brand voice guidance text.
+
+Preferred `colorVariables` keys:
+
+- `pageBackground`
+- `headings`
+- `bodyText`
+- `button`
+- `buttonText`
+- `lightBackground`
+- `darkBackground`
+- `starRating`
+
+Compatibility keys also accepted:
+
+- `page-background`
+- `body-text`
+- `button-background`
+- `button-text`
+- `light-background`
+- `dark-background`
+- `star-rating`
+
+Validation notes:
+
+- This command is partial. Omitted fields are preserved.
+- Color values must be 3- or 6-digit hex values, with or without `#`.
+- UXON normalizes saved values to uppercase `#RRGGBB`.
+- `button` maps to UXON's primary button background color.
+- Logo upload/import is not part of this command.
+- Run `branding.get` after every update and confirm the saved values.
+
+Request example:
+
+```json
+{
+  "command": "branding.update",
+  "input": {
+    "siteId": "site_uuid",
+    "colorVariables": {
+      "pageBackground": "#FFFFFF",
+      "headings": "#2F2217",
+      "bodyText": "#343433",
+      "button": "#F8C80B",
+      "buttonText": "#111111",
+      "lightBackground": "#F7F7E0",
+      "darkBackground": "#2F2217",
+      "starRating": "#FDBF01"
+    },
+    "brandColors": [
+      "#F8C80B",
+      "#947C1C",
+      "#343433",
+      "#AA7944",
+      "#E4D3B2",
+      "#2F2217",
+      "#FFFFFF"
+    ],
+    "paletteName": "Brand colours",
+    "brandVoice": "Clear, useful, confident, and specific. Avoid hype."
+  }
+}
+```
+
+Minimal partial update:
+
+```json
+{
+  "command": "branding.update",
+  "input": {
+    "siteId": "site_uuid",
+    "colorVariables": {
+      "button": "#F8C80B",
+      "buttonText": "#111111"
+    }
+  }
+}
+```
+
+Expected output keys:
+
+- `data.siteId`
+- `data.updatedFields[]`
+- `data.branding`
+
+Common failures:
+
+- `400` no editable fields, invalid color, or missing `siteId`
 - `404` sub-account not found
 
 ---
